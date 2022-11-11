@@ -1,11 +1,10 @@
 package io.github.giger85.example;
 
 import org.jooq.DSLContext;
-import org.jooq.Field;
 import org.jooq.Record;
 import org.springframework.stereotype.Repository;
 
-import static org.jooq.impl.DSL.field;
+import static io.github.giger85.example.Tables.FOO;
 
 @Repository
 public class DefaultFooRepository implements FooRepository {
@@ -17,11 +16,9 @@ public class DefaultFooRepository implements FooRepository {
 
     @Override
     public FooEntity findById(long id) {
-        Field<Long> idField = field("id", Long.class);
-
-        Record foo = create.select()
-                .from("foo")
-                .where(idField.eq(id))
+        Record foo = create.select(FOO.ID, FOO.NAME, FOO.CREATED_AT)
+                .from(FOO)
+                .where(FOO.ID.eq(id))
                 .fetchOne();
 
         if (foo == null) {
