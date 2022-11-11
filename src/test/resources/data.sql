@@ -1,0 +1,1 @@
+INSERT INTO foo (ID, NAME) VALUES (1, 'foo user #1');
