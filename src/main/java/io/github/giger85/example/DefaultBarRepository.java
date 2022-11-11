@@ -46,4 +46,19 @@ public class DefaultBarRepository implements BarRepository {
         return bar.map(RECORD_MAPPER);
     }
 
+    @Override
+    public BarEntity findByIdError(long id) {
+        // TODO: Record bar = create.select(BAR.ID, BAR.NAME, BAR.JSON_ARRAY_DATA, BAR.CREATED_AT)
+        Record bar = create.select(BAR.ID, BAR.NAME, BAR.JSON_ARRAY_DATA, BAR.CREATED_AT)
+                .from(BAR)
+                .where(BAR.ID.eq(id))
+                .fetchOne();
+
+        if (bar == null) {
+            return null;
+        }
+
+        return bar.into(BarEntity.class);
+    }
+
 }

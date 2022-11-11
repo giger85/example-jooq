@@ -1,10 +1,13 @@
 package io.github.giger85.example;
 
+import com.fasterxml.jackson.databind.exc.MismatchedInputException;
+import org.jooq.exception.DataAccessException;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @ActiveProfiles("test")
@@ -28,5 +31,16 @@ class BarRepositoryIntegrationTests {
         assertThat(barEntity.jsonArrayData()).isNotNull();
         assertThat(barEntity.jsonArrayData()[0].key()).isEqualTo("firstKey");
         assertThat(barEntity.jsonArrayData()[0].value()).isEqualTo("firstValue");
+    }
+
+    @Test
+    void testFindByIdError() {
+        // Given
+        long id = 2L;
+        // When
+        assertThatThrownBy(() -> barRepository.findByIdError(id))
+                .isInstanceOf(DataAccessException.class)
+                .rootCause()
+                .isInstanceOf(MismatchedInputException.class);
     }
 }
