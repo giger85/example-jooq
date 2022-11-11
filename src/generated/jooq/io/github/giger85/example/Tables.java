@@ -4,6 +4,7 @@
 package io.github.giger85.example;
 
 
+import io.github.giger85.example.tables.Bar;
 import io.github.giger85.example.tables.Foo;
 
 
@@ -12,6 +13,11 @@ import io.github.giger85.example.tables.Foo;
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Tables {
+
+    /**
+     * The table <code>public.bar</code>.
+     */
+    public static final Bar BAR = Bar.BAR;
 
     /**
      * The table <code>public.foo</code>.

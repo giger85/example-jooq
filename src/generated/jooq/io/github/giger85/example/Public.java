@@ -4,6 +4,7 @@
 package io.github.giger85.example;
 
 
+import io.github.giger85.example.tables.Bar;
 import io.github.giger85.example.tables.Foo;
 
 import java.util.Arrays;
@@ -28,6 +29,11 @@ public class Public extends SchemaImpl {
     public static final Public PUBLIC = new Public();
 
     /**
+     * The table <code>public.bar</code>.
+     */
+    public final Bar BAR = Bar.BAR;
+
+    /**
      * The table <code>public.foo</code>.
      */
     public final Foo FOO = Foo.FOO;
@@ -48,6 +54,7 @@ public class Public extends SchemaImpl {
     @Override
     public final List<Table<?>> getTables() {
         return Arrays.asList(
+            Bar.BAR,
             Foo.FOO
         );
     }

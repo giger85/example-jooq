@@ -4,6 +4,7 @@
 package io.github.giger85.example;
 
 
+import io.github.giger85.example.tables.Bar;
 import io.github.giger85.example.tables.Foo;
 
 import org.jooq.Record;
@@ -24,5 +25,6 @@ public class Keys {
     // UNIQUE and PRIMARY KEY definitions
     // -------------------------------------------------------------------------
 
+    public static final UniqueKey<Record> BAR_PKEY = Internal.createUniqueKey(Bar.BAR, DSL.name("bar_pkey"), new TableField[] { Bar.BAR.ID }, true);
     public static final UniqueKey<Record> FOO_PKEY = Internal.createUniqueKey(Foo.FOO, DSL.name("foo_pkey"), new TableField[] { Foo.FOO.ID }, true);
 }

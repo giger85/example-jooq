@@ -71,6 +71,12 @@ jooq {
                                 userType = 'io.github.giger85.example.FooInfo'
                                 jsonConverter = true
                             }
+                            forcedType {
+                                includeExpression = 'bar.json_array_data'
+                                includeTypes = 'JSONB'
+                                userType = 'io.github.giger85.example.BarInfo[]'
+                                jsonConverter = true
+                            }
                         }
                     }
                     generate {
