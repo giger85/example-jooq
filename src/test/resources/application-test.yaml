@@ -8,4 +8,5 @@ spring:
 # logging
 logging:
   level:
+    org.jooq: debug
     org.springframework.jdbc: debug

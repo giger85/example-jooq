@@ -25,5 +25,7 @@ class FooRepositoryIntegrationTests {
         assertThat(fooEntity).isNotNull();
         assertThat(fooEntity.id()).as("Both ids should be same.").isEqualTo(id);
         assertThat(fooEntity.name()).isEqualTo("foo user #1");
+        assertThat(fooEntity.jsonData()).isNotNull();
+        assertThat(fooEntity.jsonData().age()).isEqualTo(38);
     }
 }

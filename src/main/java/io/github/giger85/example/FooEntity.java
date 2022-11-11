@@ -8,6 +8,7 @@ import java.time.OffsetDateTime;
 public record FooEntity(
         @NotNull Long id,
         @NotNull String name,
+        FooInfo jsonData,
         @NotNull OffsetDateTime createdAt
 ) {
 }

@@ -1,10 +1,10 @@
 import nu.studer.gradle.jooq.JooqEdition
 
 plugins {
-	id 'org.springframework.boot' version '3.0.0-RC1'
-	id 'io.spring.dependency-management' version '1.1.0'
-	id 'nu.studer.jooq' version '8.0'
-	id 'java'
+    id 'org.springframework.boot' version '3.0.0-RC1'
+    id 'io.spring.dependency-management' version '1.1.0'
+    id 'nu.studer.jooq' version '8.0'
+    id 'java'
 }
 
 group = 'io.github.giger85'
@@ -12,68 +12,84 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
 repositories {
-	mavenCentral()
-	maven { url 'https://repo.spring.io/milestone' }
+    mavenCentral()
+    maven { url 'https://repo.spring.io/milestone' }
 }
 
 ext {
-	set('testcontainersVersion', "1.17.4")
+    set('testcontainersVersion', "1.17.4")
 }
 
 dependencies {
-	// code generation
-	jooqGenerator 'org.testcontainers:postgresql'
-	jooqGenerator 'org.postgresql:postgresql'
-	jooqGenerator 'org.slf4j:slf4j-simple'
+    // code generation
+    jooqGenerator 'org.testcontainers:postgresql'
+    jooqGenerator 'org.postgresql:postgresql'
+    jooqGenerator 'org.slf4j:slf4j-simple'
 
-	implementation 'org.springframework.boot:spring-boot-starter-jooq'
+    implementation 'org.springframework.boot:spring-boot-starter-jooq'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.jooq:jooq-jackson-extensions'
+
     runtimeOnly 'org.postgresql:postgresql'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.testcontainers:junit-jupiter'
-	testImplementation 'org.testcontainers:postgresql'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.testcontainers:junit-jupiter'
+    testImplementation 'org.testcontainers:postgresql'
 }
 
 dependencyManagement {
-	imports {
-		mavenBom "org.testcontainers:testcontainers-bom:${testcontainersVersion}"
-	}
+    imports {
+        mavenBom "org.testcontainers:testcontainers-bom:${testcontainersVersion}"
+    }
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }
 
 jooq {
-	version = '3.17.4'
-	edition = JooqEdition.OSS
+    version = '3.17.4'
+    edition = JooqEdition.OSS
 
-	configurations {
-		main {
-			generationTool {
-				logging = org.jooq.meta.jaxb.Logging.WARN
-				jdbc {
-					driver = 'org.testcontainers.jdbc.ContainerDatabaseDriver'
-					url = 'jdbc:tc:postgresql:15.1:///postgres?TC_INITSCRIPT=file:src/main/resources/schema.sql'
-				}
-				generator {
-					name = 'org.jooq.codegen.DefaultGenerator'
-					database {
-						name = 'org.jooq.meta.postgres.PostgresDatabase'
-						inputSchema = 'public'
-					}
-					generate {
-						deprecated = false
-						records = false
-						immutablePojos = false
-						fluentSetters = false
-					}
-					target {
-						packageName = 'io.github.giger85.example'
-						directory = 'src/generated/jooq'
-					}
-				}
-			}
-		}
-	}
+    configurations {
+        main {
+            generationTool {
+                logging = org.jooq.meta.jaxb.Logging.WARN
+                jdbc {
+                    driver = 'org.testcontainers.jdbc.ContainerDatabaseDriver'
+                    url = 'jdbc:tc:postgresql:15.1:///postgres?TC_INITSCRIPT=file:src/main/resources/schema.sql'
+                }
+                generator {
+                    name = 'org.jooq.codegen.DefaultGenerator'
+                    database {
+                        name = 'org.jooq.meta.postgres.PostgresDatabase'
+                        inputSchema = 'public'
+                        forcedTypes {
+                            forcedType {
+                                includeExpression = 'foo.json_data'
+                                includeTypes = 'JSONB'
+                                userType = 'io.github.giger85.example.FooInfo'
+                                jsonConverter = true
+                            }
+                        }
+                    }
+                    generate {
+                        deprecated = false
+                        records = false
+                        immutablePojos = false
+                        fluentSetters = false
+                    }
+                    target {
+                        packageName = 'io.github.giger85.example'
+                        directory = 'src/generated/jooq'
+                    }
+                }
+            }
+        }
+    }
+}
+
+tasks.named('generateJooq').configure {
+    // make jOOQ task participate in incremental builds (which is also a prerequisite for build caching)
+    allInputsDeclared = true
 }

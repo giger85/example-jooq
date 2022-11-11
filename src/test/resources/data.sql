@@ -1,1 +1,1 @@
-INSERT INTO foo (ID, NAME) VALUES (1, 'foo user #1');
+INSERT INTO foo (id, name, json_data) VALUES (1, 'foo user #1', '{"age": 38}'::jsonb);

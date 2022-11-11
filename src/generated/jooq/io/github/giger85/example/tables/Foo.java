@@ -4,6 +4,7 @@
 package io.github.giger85.example.tables;
 
 
+import io.github.giger85.example.FooInfo;
 import io.github.giger85.example.Keys;
 import io.github.giger85.example.Public;
 
@@ -21,6 +22,7 @@ import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
+import org.jooq.jackson.extensions.converters.JSONBtoJacksonConverter;
 
 
 /**
@@ -53,6 +55,11 @@ public class Foo extends TableImpl<Record> {
      * The column <code>public.foo.name</code>.
      */
     public final TableField<Record, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR(16).nullable(false), this, "");
+
+    /**
+     * The column <code>public.foo.json_data</code>.
+     */
+    public final TableField<Record, FooInfo> JSON_DATA = createField(DSL.name("json_data"), SQLDataType.JSONB, this, "", new JSONBtoJacksonConverter<FooInfo>(FooInfo.class));
 
     /**
      * The column <code>public.foo.created_at</code>.

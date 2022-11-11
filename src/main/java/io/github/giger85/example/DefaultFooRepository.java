@@ -16,7 +16,7 @@ public class DefaultFooRepository implements FooRepository {
 
     @Override
     public FooEntity findById(long id) {
-        Record foo = create.select(FOO.ID, FOO.NAME, FOO.CREATED_AT)
+        Record foo = create.select(FOO.ID, FOO.NAME, FOO.JSON_DATA, FOO.CREATED_AT)
                 .from(FOO)
                 .where(FOO.ID.eq(id))
                 .fetchOne();
